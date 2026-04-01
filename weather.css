@@ -1,0 +1,255 @@
+body {
+    background-color: #edeff4;
+    color: #2f313b;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logo {
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+}
+
+.logos {
+    height: 45px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 65px;
+}
+
+.logo-text h3 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+    transform: translateY(-2px);
+}
+
+.logo-text p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.ftr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+
+.ftr button {
+    margin-left: 10px;
+}
+
+.ftr .nav {
+    display: flex;
+    align-items: center;
+}
+
+.ftr button {
+    padding: 8px 14px;
+    border: 1px solid #2f313b;
+    background: transparent;
+    color: #2f313b;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.ftr button:hover {
+    background: #2f313b;
+    color: #edeff4;
+    transform: translateY(-2px);
+}
+
+.ftr button:active {
+    transform: translateY(0);
+    opacity: 0.85;
+}
+
+.news-t {
+    padding:0px 3px;
+}
+
+
+button {
+        padding: 8px 14px;
+    border: 1px solid #2f313b;
+    background: transparent;
+    color: #2f313b;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover {
+    background: #2f313b;
+    color: #edeff4;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+    opacity: 0.85;
+}
+
+input {
+    padding: 10px 14px;
+    border: 1px solid #2f313b;
+    background: transparent;
+    color: #2f313b;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.25s ease;
+    min-width: 240px;
+}
+
+input:focus {
+    box-shadow: 0 0 0 3px rgba(47, 49, 59, 0.12);
+}
+
+input::placeholder {
+    color: #5c6170;
+}
+
+#weather {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #2f313b;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.45);
+    max-width: 520px;
+    box-shadow: 0 8px 24px rgba(47, 49, 59, 0.08);
+    transition: all 0.25s ease;
+}
+
+#weather:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(47, 49, 59, 0.12);
+}
+
+#weather h2 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-size: 28px;
+    line-height: 1.1;
+}
+
+#weather p {
+    margin: 8px 0;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.weather-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 10px 0 0 3px;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.weather-icon {
+    width: 72px;
+    height: 72px;
+}
+
+.weather-temp {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.weather-desc {
+    font-size: 16px;
+    text-transform: capitalize;
+    opacity: 0.9;
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.weather-card {
+    border: 1px solid #2f313b;
+    border-radius: 10px;
+    padding: 12px;
+    background: rgba(237, 239, 244, 0.65);
+}
+
+.weather-card span {
+    display: block;
+}
+
+.weather-card .label {
+    font-size: 12px;
+    opacity: 0.75;
+    margin-bottom: 4px;
+}
+
+.weather-card .value {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .ftr {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .ftr .nav {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .ftr button {
+        margin-left: 0;
+    }
+
+    .weather-wrap {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    input {
+        min-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #weather {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .weather-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .weather-temp {
+        font-size: 28px;
+    }
+
+    #weather h2 {
+        font-size: 24px;
+    }
+}

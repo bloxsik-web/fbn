@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBN - Firefy Broadcasting Network</title>
+    <link rel="stylesheet" href="weather.css">
+</head>
+<body>
+
+<footer class="ftr">
+    <div class="logo">
+        <img src="bin/img/logo.png" alt="logo" class="logos">
+
+        <div class="logo-text">
+            <h3>FBN</h3>
+            <p>Firefy Broadcasting Network</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="window.location.href='index.html'">Новости</button>
+        <button onclick="window.location.href='weather.html'">Погода</button>
+        <button onclick="window.location.href='value.html'">Курс валют</button>
+    </div>
+</footer>
+
+<h1 class="news-t">Погода</h1>
+
+<div class="weather-wrap">
+    <input type="text" id="cityInput" placeholder="Введите город">
+    <button onclick="searchCity()">Найти</button>
+</div>
+
+<div id="weather">
+    <p>Загрузка погоды...</p>
+</div>
+
+<script>
+const API_KEY = "bd5e378503939ddaee76f12ad7a97608";
+
+function getWindDirection(deg) {
+    const directions = ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"];
+    return directions[Math.round(deg / 45) % 8];
+}
+
+function getWeatherByCoords(lat, lon) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=ru`)
+        .then(res => res.json())
+        .then(data => showWeather(data))
+        .catch(() => {
+            document.getElementById("weather").innerHTML = "<p>Не удалось загрузить погоду</p>";
+        });
+}
+
+function getWeatherByCity(city) {
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(city)}&limit=5&appid=${API_KEY}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data || data.length === 0) {
+                document.getElementById("weather").innerHTML = "<p>Населённый пункт не найден</p>";
+                return;
+            }
+
+            const place = data[0];
+            getWeatherByCoords(place.lat, place.lon);
+        })
+        .catch(() => {
+            document.getElementById("weather").innerHTML = "<p>Ошибка поиска населённого пункта</p>";
+        });
+}
+
+function showWeather(data) {
+    if (!data || data.cod !== 200) {
+        document.getElementById("weather").innerHTML = "<p>Погода не найдена</p>";
+        return;
+    }
+
+    const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+    const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString("ru-RU", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+
+    const windDeg = data.wind.deg ?? 0;
+    const windDir = getWindDirection(windDeg);
+
+    const rain = data.rain && data.rain["1h"] ? data.rain["1h"] + " мм" : "нет";
+    const snow = data.snow && data.snow["1h"] ? data.snow["1h"] + " мм" : "нет";
+    const visibility = data.visibility ? data.visibility + " м" : "нет данных";
+
+    document.getElementById("weather").innerHTML = `
+        <h2>📍 ${data.name}${data.sys.country ? ", " + data.sys.country : ""}</h2>
+
+        <div class="weather-main">
+            <img class="weather-icon" src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="Погода">
+            <div>
+                <div class="weather-temp"> ${Math.round(data.main.temp)}°C</div>
+                <div class="weather-desc">☁️ ${data.weather[0].description}</div>
+            </div>
+        </div>
+
+        <div class="weather-grid">
+            <div class="weather-card">
+                <span class="label">🌡️ Ощущается как</span>
+                <span class="value">${Math.round(data.main.feels_like)}°C</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">📊 Мин / Макс</span>
+                <span class="value">${Math.round(data.main.temp_min)}°C / ${Math.round(data.main.temp_max)}°C</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">💧 Влажность</span>
+                <span class="value">${data.main.humidity}%</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">🧭 Давление</span>
+                <span class="value">${data.main.pressure} hPa</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">🌬️ Ветер</span>
+                <span class="value">${data.wind.speed} м/с, ${windDeg}° (${windDir})</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">☁️ Облачность</span>
+                <span class="value">${data.clouds.all}%</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">🌧️ Дождь</span>
+                <span class="value">${rain}</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">❄️ Снег</span>
+                <span class="value">${snow}</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">👁️ Видимость</span>
+                <span class="value">${visibility}</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">🌅 Восход</span>
+                <span class="value">${sunrise}</span>
+            </div>
+
+            <div class="weather-card">
+                <span class="label">🌇 Закат</span>
+                <span class="value">${sunset}</span>
+            </div>
+        </div>
+    `;
+}
+
+function loadDefaultCity() {
+    getWeatherByCity("Москва");
+}
+
+function searchCity() {
+    const city = document.getElementById("cityInput").value.trim();
+    if (city) {
+        getWeatherByCity(city);
+    }
+}
+
+function loadWeather() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                getWeatherByCoords(position.coords.latitude, position.coords.longitude);
+            },
+            () => {
+                loadDefaultCity();
+            }
+        );
+    } else {
+        loadDefaultCity();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("cityInput");
+
+    input.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            searchCity();
+        }
+    });
+
+    loadWeather();
+});
+</script>
+
+</body>
+</html>

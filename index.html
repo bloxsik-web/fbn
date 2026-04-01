@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBN - Firefy Broadcasting Network</title>
+    <link rel="stylesheet" href="home.css">
+    <link rel="icon" type="image/png" href="./bin/img/white.png">
+</head>
+<body>
+
+<footer class="ftr">
+    <div class="logo">
+        <img src="bin/img/logo.png" alt="logo" class="logos" id="adminLogo">
+
+        <div class="logo-text">
+            <h3>FBN</h3>
+            <p>Firefy Broadcasting Network</p>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="window.location.href='index.html'">Новости</button>
+        <button onclick="window.location.href='weather.html'">Погода</button>
+        <button onclick="window.location.href='value.html'">Курс валют</button>
+    </div>
+</footer>
+
+<h1 class="news-t">Свежие новости</h1>
+
+<!-- Админ панель -->
+<div id="adminPanel" style="display:none;">
+    <h2>Админ-панель</h2>
+    <input type="text" id="newsTitle" placeholder="Заголовок"><br><br>
+    <textarea id="newsContent" placeholder="Текст новости"></textarea><br><br>
+    <button id="publishBtn">Выложить новость</button>
+</div>
+
+<div class="news">
+    <!-- сюда будут добавляться новости -->
+    <div id="newsList">Идет загрузка...</div>
+</div>
+
+<!-- Модалка -->
+<div id="adminModal" style="display:none;">
+    <div>
+        <h3>Введите админ ключ</h3>
+        <input type="password" id="adminKey">
+        <button id="loginBtn">Войти</button>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCY2qQJ9WDN2mO-xR76bi4ZPIzRKjW1df4",
+    authDomain: "fbnetwork.firebaseapp.com",
+    projectId: "fbnetwork",
+    storageBucket: "fbnetwork.firebasestorage.app",
+    messagingSenderId: "785846435941",
+    appId: "1:785846435941:web:0293f3a3e0655c09d4468c",
+    databaseURL: "https://fbnetwork-default-rtdb.firebaseio.com"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ====== 25 кликов ======
+let clickCount = 0;
+const logo = document.getElementById("adminLogo");
+const modal = document.getElementById("adminModal");
+
+logo.addEventListener("click", () => {
+    clickCount++;
+
+    if (clickCount >= 25) {
+        modal.style.display = "block";
+        clickCount = 0;
+    }
+});
+
+// ====== проверка ключа ======
+document.getElementById("loginBtn").addEventListener("click", () => {
+    const key = document.getElementById("adminKey").value;
+
+    if (key === "BIN-KEY-FBN-1515d31r2-f7I32-43G-dRGm-5de34l") {
+        document.getElementById("adminPanel").style.display = "block";
+        modal.style.display = "none";
+    } else {
+        alert("Неверный ключ");
+    }
+});
+
+// ====== добавить новость ======
+document.getElementById("publishBtn").addEventListener("click", () => {
+    const title = document.getElementById("newsTitle").value;
+    const content = document.getElementById("newsContent").value;
+
+    if (!title || !content) {
+        alert("Заполни все поля");
+        return;
+    }
+
+    push(ref(db, "news"), {
+        title,
+        content,
+        date: new Date().toLocaleString()
+    });
+
+    document.getElementById("newsTitle").value = "";
+    document.getElementById("newsContent").value = "";
+});
+
+// ====== загрузка новостей ======
+const newsList = document.getElementById("newsList");
+
+onValue(ref(db, "news"), (snapshot) => {
+    newsList.innerHTML = "";
+
+    const data = snapshot.val();
+
+    for (let id in data) {
+        const item = data[id];
+
+        const div = document.createElement("div");
+        div.className = "public";
+
+        div.innerHTML = `
+         <h3>${item.title}</h3>
+         <p>${item.content.replace(/\n/g, "<br>")}</p>
+          <small>${item.date}</small>
+         `;
+
+        newsList.prepend(div);
+    }
+});
+</script>
+
+</body>
+</html>

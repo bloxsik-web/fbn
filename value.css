@@ -1,0 +1,103 @@
+body {
+    background-color: #edeff4;
+    color: #2f313b;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logo {
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+}
+
+.logos {
+    height: 45px;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 65px;
+}
+
+.logo-text h3 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+    transform: translateY(-2px);
+}
+
+.logo-text p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.ftr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+
+.ftr button {
+    margin-left: 10px;
+}
+
+.ftr .nav {
+    display: flex;
+    align-items: center;
+}
+
+.ftr button {
+    padding: 8px 14px;
+    border: 1px solid #2f313b;
+    background: transparent;
+    color: #2f313b;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.ftr button:hover {
+    background: #2f313b;
+    color: #edeff4;
+    transform: translateY(-2px);
+}
+
+.ftr button:active {
+    transform: translateY(0);
+    opacity: 0.85;
+}
+
+.news-t {
+    padding:0px 3px;
+}
+
+.rate {
+    padding:0px 5px;
+}
+button {
+        padding: 8px 14px;
+    border: 1px solid #2f313b;
+    background: transparent;
+    color: #2f313b;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover {
+    background: #2f313b;
+    color: #edeff4;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+    opacity: 0.85;
+}
